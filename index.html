@@ -3,191 +3,136 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>2025학년도 등교지도 규정 위반 기록 시스템</title>
+  <title>2025 등교지도 시스템</title>
   <style>
-    html, body {
+    body {
       font-family: "Segoe UI", sans-serif;
-      background: #f5f7fa;
+      background: #f0f4f8;
       color: #333;
+      text-align: center;
       margin: 0;
-      padding: 1rem;
-      height: 100%;
-      overflow: auto;
+      padding: 2rem;
+      font-size: 2rem;
     }
-
     h1 {
-      color: #4a90e2;
+      color: #0077cc;
       font-size: 3rem;
-      margin-top: 1rem;
+      margin-bottom: 2rem;
     }
-
     input#studentId {
       font-size: 3rem;
       padding: 1rem;
+      width: 80%;
       text-align: center;
-      margin: 2rem 0 1rem 0;
-      width: 90%;
-      max-width: 600px;
+      margin-bottom: 2rem;
+      border-radius: 1rem;
+      border: 2px solid #ccc;
     }
-
     .keypad {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-      margin: 2rem auto;
+      gap: 1.5rem;
       max-width: 600px;
+      margin: 0 auto 2rem;
     }
-
     .keypad button {
       font-size: 3rem;
-      padding: 2.5rem;
+      padding: 2rem;
       border: none;
-      border-radius: 1rem;
-      background: #dff0fc;
-      color: #333;
+      border-radius: 1.5rem;
+      background: #e0f3ff;
       transition: 0.2s;
-      width: 100%;
     }
-
     .keypad button:hover {
-      background: #b2dcfb;
+      background: #bfe4ff;
     }
-
     .photo {
       width: 300px;
       height: 400px;
       object-fit: cover;
-      margin: 1.5rem auto;
-      border: 3px dashed #ccc;
-    }
-
-    .actions {
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-      margin-top: 2rem;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .actions button {
-      font-size: 2.5rem;
-      padding: 2rem;
-      border: none;
-      border-radius: 1rem;
-      background-color: #ffd166;
-      color: #333;
-    }
-
-    .return-btn {
-      margin-top: 3rem;
-      background-color: #ccc;
-      font-size: 2.5rem;
-      padding: 1.5rem 3rem;
-    }
-
-    .admin-button-container {
-      margin-top: 2rem;
-    }
-
-    #adminModeBtn {
-      display: none;
-      font-size: 2.5rem;
-      padding: 1.5rem 3rem;
-    }
-
-    #photoSection, #adminSection {
-      display: none;
-    }
-
-    table {
+      border: 3px dashed #aaa;
       margin: 2rem auto;
-      border-collapse: collapse;
-      width: 95%;
-      max-width: 1000px;
+    }
+    .actions button {
+      font-size: 2.2rem;
+      padding: 1.2rem 2rem;
+      margin: 1rem;
+      border-radius: 1.2rem;
+      border: none;
+      background: #ffe066;
+      min-width: 300px;
+    }
+    .student-info {
+      font-size: 2rem;
+      margin-top: 1rem;
+    }
+    .return-btn, .admin-button-container button {
+      font-size: 2rem;
+      padding: 1rem 2rem;
+      margin-top: 2rem;
+      border-radius: 1rem;
+      border: none;
+      background: #ccc;
+    }
+    table {
       font-size: 1.8rem;
+      width: 100%;
+      margin-top: 2rem;
+      border-collapse: collapse;
     }
-
     th, td {
-      border: 1px solid #ccc;
+      border: 2px solid #aaa;
       padding: 1rem;
-      text-align: center;
     }
-
     th {
-      background-color: #e8f4fd;
-      cursor: pointer;
+      background: #ddefff;
     }
-
-    th:hover {
-      background-color: #c7e3fb;
-    }
-
-    #deleteIdInput {
+    #adminSection input {
       font-size: 2rem;
       padding: 1rem;
-      width: 90%;
-      max-width: 400px;
-      display: block;
-      margin: 1.5rem auto;
-    }
-
-    button {
-      font-size: 2.2rem;
-      padding: 1.2rem 2.5rem;
-      border-radius: 1rem;
+      width: 300px;
+      margin-top: 1rem;
     }
   </style>
 </head>
 <body>
-  <h1>2025학년도 등교지도 규정 위반 기록 시스템</h1>
+  <h1>2025 등교지도 시스템</h1>
 
   <div id="inputSection">
-    <input type="text" id="studentId" placeholder="학번을 입력하세요. (5자리)" readonly />
+    <input type="text" id="studentId" placeholder="학번 입력" readonly />
     <div class="keypad" id="keypad"></div>
     <div class="admin-button-container">
-      <button id="adminModeBtn" onclick="requestAdminMode()">관리자모드</button>
+      <button id="adminModeBtn" onclick="requestAdminMode()">🔐 관리자모드</button>
     </div>
   </div>
 
-  <div id="photoSection">
+  <div id="photoSection" style="display:none;">
     <img id="studentPhoto" class="photo" src="" alt="학생 사진" />
     <div id="photoMessage" class="student-info"></div>
 
     <div class="actions">
-      <button onclick="addViolation('복장 규정 위반')">복장 규정 위반</button>
-      <button onclick="addViolation('태도 불량')">태도 불량</button>
-      <button onclick="addViolation('기타 위반')">기타 위반</button>
+      <button onclick="addViolation('복장 규정 위반')">👕 복장 규정 위반</button>
+      <button onclick="addViolation('태도 불량')">😠 태도 불량</button>
+      <button onclick="addViolation('기타 위반')">⚠ 기타 위반</button>
     </div>
-
-    <button class="return-btn" onclick="goToStart()">처음으로</button>
+    <button class="return-btn" onclick="goToStart()">🏠 처음으로</button>
   </div>
 
-  <div id="adminSection">
-    <h2>📋 전체 기록 📋</h2>
+  <div id="adminSection" style="display:none;">
+    <h2>📋 전체 기록</h2>
     <div id="adminLogs"></div>
-    <button onclick="downloadCSV()">CSV 내보내기</button><br><br>
-    <button onclick="clearAllLogs()">모든 기록 삭제</button><br><br>
-    <button onclick="deleteSpecificLog()">특정 학번 삭제</button>
-    <input type="text" id="deleteIdInput" placeholder="삭제할 학번 입력" /><br>
-    <button class="return-btn" onclick="goToStart()">처음으로</button>
+    <button onclick="downloadCSV()">📥 CSV 내보내기</button><br><br>
+    <button onclick="clearAllLogs()">🗑 모든 기록 삭제</button><br><br>
+    <input id="deleteIdInput" placeholder="삭제할 학번 입력" /><br>
+    <button onclick="deleteSpecificLog()">❌ 특정 학번 삭제</button><br>
+    <button class="return-btn" onclick="goToStart()">🏠 처음으로</button>
   </div>
 
   <script>
-    const keypad = document.getElementById('keypad');
-    const studentIdInput = document.getElementById('studentId');
-    const studentPhoto = document.getElementById('studentPhoto');
-    const photoMessage = document.getElementById('photoMessage');
-    const inputSection = document.getElementById('inputSection');
-    const photoSection = document.getElementById('photoSection');
-    const adminSection = document.getElementById('adminSection');
-    const adminLogs = document.getElementById('adminLogs');
-    const adminModeBtn = document.getElementById('adminModeBtn');
-
+    const keypad = document.getElementById("keypad");
     const keys = ['1','2','3','4','5','6','7','8','9','←','0','확인'];
     keys.forEach(key => {
-      const btn = document.createElement('button');
+      const btn = document.createElement("button");
       btn.textContent = key;
       btn.onclick = () => {
         if (key === '←') studentIdInput.value = studentIdInput.value.slice(0, -1);
@@ -197,6 +142,13 @@
       keypad.appendChild(btn);
     });
 
+    const studentIdInput = document.getElementById("studentId");
+    const photoSection = document.getElementById("photoSection");
+    const inputSection = document.getElementById("inputSection");
+    const studentPhoto = document.getElementById("studentPhoto");
+    const photoMessage = document.getElementById("photoMessage");
+    const adminSection = document.getElementById("adminSection");
+    const adminLogs = document.getElementById("adminLogs");
     const studentNames = {
       "20231234": "홍길동",
       "20239876": "김철수"
@@ -204,23 +156,20 @@
 
     function validateId() {
       const id = studentIdInput.value;
-      if (!id) return alert('학번을 입력하세요.');
-      inputSection.style.display = 'none';
-      photoSection.style.display = 'block';
-      adminModeBtn.style.display = 'none';
+      if (!id) return alert("학번을 입력하세요.");
+      inputSection.style.display = "none";
+      photoSection.style.display = "block";
       loadPhoto(id);
       showStudentHistory(id);
     }
 
     function loadPhoto(id) {
-      const imgPath = `images/${id}.jpg`;
-      studentPhoto.src = imgPath;
-
+      studentPhoto.src = `images/${id}.jpg`;
       studentPhoto.onerror = () => {
-        studentPhoto.src = 'images/default.jpg';
-        photoMessage.innerHTML = `<p>사진이 없어 기본 이미지를 표시합니다.</p><p>학번: ${id}</p>`;
+        studentPhoto.src = "images/default.jpg";
+        photoMessage.innerHTML = `<p>사진 없음: 기본 이미지 사용</p><p>학번: ${id}</p>`;
+        showStudentHistory(id);
       };
-
       studentPhoto.onload = () => {
         photoMessage.innerHTML = `<p>학번: ${id}</p>`;
         showStudentHistory(id);
@@ -228,52 +177,49 @@
     }
 
     function showStudentHistory(id) {
-      const log = JSON.parse(localStorage.getItem(`log_${id}`) || '[]');
+      const log = JSON.parse(localStorage.getItem(`log_${id}`) || "[]");
       if (log.length > 0) {
-        const historyHTML = log.map(l => `📌 ${l.timestamp} - ${l.reason}`).join('<br>');
-        photoMessage.innerHTML += `<div style="margin-top: 1rem;"><strong>이전 기록:</strong><br>${historyHTML}</div>`;
+        const historyHTML = log.map(l => `📌 ${l.timestamp} - ${l.reason}`).join("<br>");
+        photoMessage.innerHTML += `<div style="margin-top:1rem;"><strong>이전 기록:</strong><br>${historyHTML}</div>`;
+      } else {
+        photoMessage.innerHTML += `<div style="margin-top:1rem;"><em>이전 기록 없음</em></div>`;
       }
     }
 
     function addViolation(reason) {
       const id = studentIdInput.value;
-      if (!id) return alert('학번을 먼저 입력하세요.');
       const timestamp = new Date().toLocaleString();
-      const key = `log_${id}`;
-      const log = JSON.parse(localStorage.getItem(key) || '[]');
+      const log = JSON.parse(localStorage.getItem(`log_${id}`) || "[]");
       log.push({ timestamp, reason });
-      localStorage.setItem(key, JSON.stringify(log));
+      localStorage.setItem(`log_${id}`, JSON.stringify(log));
       alert(`${reason} 기록됨`);
-      setTimeout(goToStart, 2000);
+      goToStart();
     }
 
     function goToStart() {
-      studentIdInput.value = '';
-      inputSection.style.display = 'block';
-      photoSection.style.display = 'none';
-      adminSection.style.display = 'none';
-      adminModeBtn.style.display = 'block';
+      studentIdInput.value = "";
+      inputSection.style.display = "block";
+      photoSection.style.display = "none";
+      adminSection.style.display = "none";
     }
 
     function requestAdminMode() {
-      const pwd = prompt('관리자 비밀번호를 입력하세요');
-      if (pwd === '11200') {
-        inputSection.style.display = 'none';
-        photoSection.style.display = 'none';
-        adminSection.style.display = 'block';
-        adminModeBtn.style.display = 'none';
+      const pwd = prompt("관리자 비밀번호를 입력하세요");
+      if (pwd === "11200") {
+        inputSection.style.display = "none";
+        adminSection.style.display = "block";
         viewAllLogs();
       } else {
-        alert('비밀번호가 틀렸습니다');
+        alert("비밀번호가 틀렸습니다.");
       }
     }
 
     function viewAllLogs() {
       const logs = [];
       for (let key in localStorage) {
-        if (key.startsWith('log_')) {
-          const id = key.replace('log_', '');
-          const name = studentNames[id] || '';
+        if (key.startsWith("log_")) {
+          const id = key.replace("log_", "");
+          const name = studentNames[id] || "";
           const data = JSON.parse(localStorage.getItem(key));
           data.forEach(entry => {
             logs.push({ id, name, timestamp: entry.timestamp, reason: entry.reason });
@@ -285,92 +231,53 @@
 
     function renderTable(logs) {
       let table = `<table><thead><tr>
-        <th onclick="sortTable('id')">학번</th>
-        <th onclick="sortTable('name')">성명</th>
-        <th onclick="sortTable('timestamp')">일시</th>
-        <th onclick="sortTable('reason')">사유</th>
-      </tr></thead><tbody>`;
-
+        <th>학번</th><th>성명</th><th>일시</th><th>사유</th></tr></thead><tbody>`;
       logs.forEach(row => {
-        table += `<tr>
-          <td>${row.id}</td>
-          <td>${row.name}</td>
-          <td>${row.timestamp}</td>
-          <td>${row.reason}</td>
-        </tr>`;
+        table += `<tr><td>${row.id}</td><td>${row.name}</td><td>${row.timestamp}</td><td>${row.reason}</td></tr>`;
       });
-
-      table += '</tbody></table>';
+      table += "</tbody></table>";
       adminLogs.innerHTML = table;
-      window.currentLogs = logs;
-    }
-
-    let sortOrder = 1;
-    let sortColumn = null;
-
-    function sortTable(column) {
-      if (sortColumn === column) sortOrder *= -1;
-      else {
-        sortColumn = column;
-        sortOrder = 1;
-      }
-
-      const sorted = [...window.currentLogs].sort((a, b) => {
-        if (a[column] < b[column]) return -1 * sortOrder;
-        if (a[column] > b[column]) return 1 * sortOrder;
-        return 0;
-      });
-      renderTable(sorted);
     }
 
     function downloadCSV() {
-      let csv = '학번,성명,일시,사유\n';
+      let csv = "학번,성명,일시,사유\n";
       for (let key in localStorage) {
-        if (key.startsWith('log_')) {
-          const id = key.replace('log_', '');
+        if (key.startsWith("log_")) {
+          const id = key.replace("log_", "");
           const logs = JSON.parse(localStorage.getItem(key));
           logs.forEach(log => {
             csv += `${id},${studentNames[id] || ''},${log.timestamp},${log.reason}\n`;
           });
         }
       }
-
-      const bom = "\uFEFF";
-      const blob = new Blob([bom + csv], { type: 'text/csv;charset=utf-8;' });
-      const a = document.createElement('a');
+      const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+      const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
-      a.download = 'student_logs.csv';
+      a.download = "student_logs.csv";
       a.click();
     }
 
     function clearAllLogs() {
-      if (confirm('정말 모든 기록을 삭제하시겠습니까? 되돌릴 수 없습니다.')) {
+      if (confirm("정말 모든 기록을 삭제할까요?")) {
         for (let key in localStorage) {
-          if (key.startsWith('log_')) {
-            localStorage.removeItem(key);
-          }
+          if (key.startsWith("log_")) localStorage.removeItem(key);
         }
-        alert('모든 기록이 삭제되었습니다.');
+        alert("모든 기록이 삭제되었습니다.");
         viewAllLogs();
       }
     }
 
     function deleteSpecificLog() {
-      const id = document.getElementById('deleteIdInput').value.trim();
-      if (!id) return alert('학번을 입력하세요.');
-      const key = `log_${id}`;
-      if (localStorage.getItem(key)) {
-        localStorage.removeItem(key);
-        alert(`${id}번 학번 기록이 삭제되었습니다.`);
+      const id = document.getElementById("deleteIdInput").value.trim();
+      if (!id) return alert("학번을 입력하세요.");
+      if (localStorage.getItem(`log_${id}`)) {
+        localStorage.removeItem(`log_${id}`);
+        alert(`${id}번 기록 삭제됨`);
         viewAllLogs();
       } else {
-        alert(`해당 학번에 대한 기록이 없습니다.`);
+        alert("해당 학번 기록 없음");
       }
     }
-
-    window.onload = () => {
-      adminModeBtn.style.display = 'block';
-    };
   </script>
 </body>
 </html>
