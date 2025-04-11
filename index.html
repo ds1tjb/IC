@@ -46,6 +46,26 @@
     .keypad button:hover {
       background: #bfe4ff;
     }
+.admin-action-button {
+  font-size: 2.2rem;
+  padding: 1.2rem 2rem;
+  margin: 1rem auto;
+  border-radius: 1.2rem;
+  border: none;
+  background: #ffd966;
+  width: 450px;       /* 고정 너비 */
+  display: block;
+}
+.admin-action-button:hover {
+  background: #ffcc33;
+}
+.admin-action-button.danger {
+  background: #ff8888;
+  color: white;
+}
+.admin-action-button.danger:hover {
+  background: #ff4d4d;
+}
     .photo {
       width: 300px;
       height: 400px;
@@ -99,7 +119,7 @@
   <h1>2025 등교지도 시스템</h1>
 
   <div id="inputSection">
-    <input type="text" id="studentId" placeholder="학번 입력" readonly />
+    <input type="text" id="studentId" placeholder="학번 입력 (5자리)" readonly />
     <div class="keypad" id="keypad"></div>
     <div class="admin-button-container">
       <button id="adminModeBtn" onclick="requestAdminMode()">🔐 관리자모드</button>
@@ -111,9 +131,9 @@
     <div id="photoMessage" class="student-info"></div>
 
     <div class="actions">
-      <button onclick="addViolation('복장 규정 위반')">👕 복장 규정 위반</button>
-      <button onclick="addViolation('태도 불량')">😠 태도 불량</button>
-      <button onclick="addViolation('기타 위반')">⚠ 기타 위반</button>
+      <button onclick="addViolation('복장 규정 위반')">👕 복장 규정 위반</button><br>
+      <button onclick="addViolation('태도 불량')">😠 태도 불량</button><br>
+      <button onclick="addViolation('기타 위반')">⚠ 기타 위반</button><br>
     </div>
     <button class="return-btn" onclick="goToStart()">🏠 처음으로</button>
   </div>
@@ -121,10 +141,11 @@
   <div id="adminSection" style="display:none;">
     <h2>📋 전체 기록</h2>
     <div id="adminLogs"></div>
-    <button onclick="downloadCSV()">📥 CSV 내보내기</button><br><br>
-    <button onclick="clearAllLogs()">🗑 모든 기록 삭제</button><br><br>
-    <input id="deleteIdInput" placeholder="삭제할 학번 입력" /><br>
-    <button onclick="deleteSpecificLog()">❌ 특정 학번 삭제</button><br>
+    <button class="admin-action-button" onclick="downloadCSV()">📥 CSV 내보내기</button>
+<button class="admin-action-button danger" onclick="clearAllLogs()">🗑 모든 기록 삭제</button>
+
+<button class="admin-action-button danger" onclick="deleteSpecificLog()">❌ 특정 학번 삭제</button>
+<input id="deleteIdInput" placeholder="삭제할 학번 입력" /><br>
     <button class="return-btn" onclick="goToStart()">🏠 처음으로</button>
   </div>
 
@@ -176,15 +197,26 @@
       };
     }
 
-    function showStudentHistory(id) {
-      const log = JSON.parse(localStorage.getItem(`log_${id}`) || "[]");
-      if (log.length > 0) {
-        const historyHTML = log.map(l => `📌 ${l.timestamp} - ${l.reason}`).join("<br>");
-        photoMessage.innerHTML += `<div style="margin-top:1rem;"><strong>이전 기록:</strong><br>${historyHTML}</div>`;
-      } else {
-        photoMessage.innerHTML += `<div style="margin-top:1rem;"><em>이전 기록 없음</em></div>`;
-      }
-    }
+   function showStudentHistory(id) {
+  const log = JSON.parse(localStorage.getItem(`log_${id}`) || "[]");
+  if (log.length > 0) {
+    const historyHTML = log.map(l => {
+      const cleanTime = l.timestamp.replace(/:\d{2}$/, ''); // 초 제거
+      return `📌 ${cleanTime} - ${l.reason}`;
+    }).join("<br>");
+    photoMessage.innerHTML += `
+      <div style="margin-top:1rem;">
+        <div style="text-align:center; font-size:1.6rem;"><strong>- 이전 기록 -</strong></div>
+        <div style="text-align:left; font-size:1.6rem;">${historyHTML}</div>
+      </div>`;
+  } else {
+    photoMessage.innerHTML += `
+      <div style="margin-top:1rem; text-align:center; font-size:1.6rem;">
+        <em>이전 기록 없음</em>
+      </div>`;
+  }
+}
+
 
     function addViolation(reason) {
       const id = studentIdInput.value;
