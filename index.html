@@ -126,17 +126,54 @@
     </div>
   </div>
 
-  <div id="photoSection" style="display:none;">
-    <img id="studentPhoto" class="photo" src="" alt="학생 사진" />
-    <div id="photoMessage" class="student-info"></div>
+<div id="photoSection" style="display:none;">
+  <div style="
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1rem;
+    flex-wrap: nowrap;
+  ">
+    <!-- 왼쪽 사진 -->
+    <img id="studentPhoto" class="photo"
+         src=""
+         alt="학생 사진"
+         style="height: 320px; width: auto; object-fit: cover; border-radius: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.2);" />
 
-    <div class="actions">
-      <button onclick="addViolation('복장 규정 위반')">👕 복장 규정 위반</button><br>
-      <button onclick="addViolation('태도 불량')">😠 태도 불량</button><br>
-      <button onclick="addViolation('기타 위반')">⚠ 기타 위반</button><br>
+    <!-- 오른쪽 학번 및 버튼 -->
+    <div style="
+      height: 320px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1rem;
+      flex-shrink: 0;
+    ">
+      <!-- 학번 텍스트 -->
+      <div style="font-size: 1.8rem; text-align: center;">
+      <span id="photoMessage"></span>
+      </div>
+
+      <!-- 위반 버튼들 -->
+      <button onclick="addViolation('복장 규정 위반')" style="padding: 0.8rem 1.5rem; font-size: 1.1rem; background-color: #ffeb3b; border-radius: 10px;">👕 복장 규정 위반</button>
+      <button onclick="addViolation('태도 불량')" style="padding: 0.8rem 1.5rem; font-size: 1.1rem; background-color: #ffeb3b; border-radius: 10px;">😠 태도 불량</button>
+      <button onclick="addViolation('기타 위반')" style="padding: 0.8rem 1.5rem; font-size: 1.1rem; background-color: #ffeb3b; border-radius: 10px;">⚠ 기타 위반</button>
     </div>
-    <button class="return-btn" onclick="goToStart()">🏠 처음으로</button>
   </div>
+
+  <!-- 기록 구간 -->
+  <div id="historySection" style="margin-top: 2.5rem;"></div>
+
+  <button class="return-btn" onclick="goToStart()">🏠 처음으로</button>
+</div>
+
+
+
+
+
 
   <div id="adminSection" style="display:none;">
     <h2>📋 전체 기록</h2>
@@ -188,34 +225,37 @@
       studentPhoto.src = `images/${id}.jpg`;
       studentPhoto.onerror = () => {
         studentPhoto.src = "images/default.jpg";
-        photoMessage.innerHTML = `<p>사진 없음: 기본 이미지 사용</p><p>학번: ${id}</p>`;
+        photoMessage.innerHTML = `<p>사진 없음: 기본 이미지 사용</p><p>학번 : ${id}</p>`;
         showStudentHistory(id);
       };
       studentPhoto.onload = () => {
-        photoMessage.innerHTML = `<p>학번: ${id}</p>`;
+        photoMessage.innerHTML = `<p>학번 : ${id}</p>`;
         showStudentHistory(id);
       };
     }
 
    function showStudentHistory(id) {
   const log = JSON.parse(localStorage.getItem(`log_${id}`) || "[]");
+  const historySection = document.getElementById("historySection");
   if (log.length > 0) {
     const historyHTML = log.map(l => {
       const cleanTime = l.timestamp.replace(/:\d{2}$/, ''); // 초 제거
       return `📌 ${cleanTime} - ${l.reason}`;
     }).join("<br>");
-    photoMessage.innerHTML += `
+    historySection.innerHTML = `
       <div style="margin-top:1rem;">
-        <div style="text-align:center; font-size:1.6rem;"><strong>- 이전 기록 -</strong></div>
+        <div style="text-align:center; font-size:1.6rem;"><strong>이전 기록:</strong></div>
         <div style="text-align:left; font-size:1.6rem;">${historyHTML}</div>
       </div>`;
   } else {
-    photoMessage.innerHTML += `
+    historySection.innerHTML = `
       <div style="margin-top:1rem; text-align:center; font-size:1.6rem;">
         <em>이전 기록 없음</em>
       </div>`;
   }
 }
+
+
 
 
     function addViolation(reason) {
